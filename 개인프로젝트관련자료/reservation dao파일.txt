@@ -1,0 +1,90 @@
+//랜덤값을 DB에 대입
+	public int fullOrnot(int num[]) {
+		int result=0;
+		try {
+			conn();
+			String sql="  update reserinfo set mon_9am=? ,tue_9am=?  ,wed_9am=?,\r\n"
+					+ " thu_9am=?, fri_9am=?,mon_6pm =?,tue_6pm =?,wed_6pm =?,thu_6pm =?,fri_6pm =?,  mon_9pm =?, tue_9pm =?, wed_9pm=?,  thu_9pm =?,  fri_9pm=? ";
+			pstmt=conn.prepareStatement(sql);
+			pstmt.setInt(1, num[0]);
+			pstmt.setInt(2, num[1]);
+			pstmt.setInt(3, num[2]);
+			pstmt.setInt(4, num[3]);
+			pstmt.setInt(5, num[4]);
+			pstmt.setInt(6, num[5]);
+			pstmt.setInt(7, num[6]);
+			pstmt.setInt(8, num[7]);
+			pstmt.setInt(9, num[8]);
+			pstmt.setInt(10, num[9]);
+			pstmt.setInt(11, num[10]);
+			pstmt.setInt(12, num[11]);
+			pstmt.setInt(13, num[12]);
+			pstmt.setInt(14, num[13]);
+			pstmt.setInt(15, num[14]);
+			result=pstmt.executeUpdate();
+		}catch(Exception e) {
+			e.printStackTrace();
+		}finally {
+			disConn();
+		}
+		
+		return result;
+	}
+
+	public member chkreservation(String chked) {
+		member mem=new member();
+		try {
+			conn();
+			String sql="select ? from reserinfo WHERE ?<8";
+			pstmt=conn.prepareStatement(sql);
+			pstmt.setString(1, chked);
+			pstmt.setString(2, chked);
+			rs=pstmt.executeQuery();
+			if(rs.next()) {
+				mem.setReserpermit("예약가능");
+			}else {
+				mem.setReserpermit("예약불가");
+			}
+		}catch(Exception e) {
+			e.printStackTrace();
+		}finally {
+			disConn();
+		}
+		return mem;
+	}
+	public member reservation1(String chked) {
+		member mem=null;
+		try {
+			conn();
+			String sql="update reserinfo set ?=?+1";
+			pstmt=conn.prepareStatement(sql);
+			pstmt.setString(1, chked);
+			pstmt.setString(2, chked);
+			if(rs.next()) {
+				mem=new member();
+				mem.setReservation1("예약성공");
+			}
+		}catch(Exception e) {
+			e.printStackTrace();
+		}finally {
+			disConn();
+		}return mem;
+	}
+	public member reservation1member(String chked) {
+		member mem=null;
+		try {
+			conn();
+			String sql="update member set reservation1=?";
+			pstmt=conn.prepareStatement(sql);
+			pstmt.setString(1, chked);
+			if(rs.next()) {
+				mem=new member();
+				mem.setReservation1(rs.getString("reservation1"));
+			}
+		}catch(Exception e) {
+			e.printStackTrace();
+		}finally {
+			disConn();
+		}
+		return mem;
+	}

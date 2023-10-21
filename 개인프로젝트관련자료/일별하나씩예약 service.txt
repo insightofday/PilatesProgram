@@ -1,0 +1,89 @@
+int nums=memberDAO.getInstance().reservation();
+		int var=0;
+		if(nums>0) {
+			var++;
+			memberInfo=memberDAO.getInstance().chknum();
+			if(memberInfo.getReserpermit().equals("success")) {
+				System.out.println("월요일 수업 예약자 수는 "+memberInfo.getMonNum()+" 명");
+				System.out.println("화요일 수업 예약자 수는 "+memberInfo.getTueNum()+ " 명");
+				System.out.println("수요일 수업 예약자 수는 "+memberInfo.getWedNum()+" 명");
+				System.out.println("목요일 수업 예약자 수는 "+memberInfo.getThuNum()+" 명");
+				System.out.println("금요일 수업 예약자 수는 "+memberInfo.getFriNum()+" 명");
+			}else {
+				System.out.println("다시 시도해 주세요");
+				chknum();
+			}
+		}else {
+			System.out.println("다시 시도해 주세요");
+			chknum();
+		}
+//			System.out.println("다시 시도해 주세요");
+//			menu();
+//		}else {
+//			System.out.println("월요일 수업 예약자 수는 "+memberInfo.getMonNum()+" 명");
+//			System.out.println("화요일 수업 예약자 수는 "+memberInfo.getTueNum()+ " 명");
+//			System.out.println("수요일 수업 예약자 수는 "+memberInfo.getWedNum()+" 명");
+//			System.out.println("목요일 수업 예약자 수는 "+memberInfo.getThuNum()+" 명");
+//			System.out.println("금요일 수업 예약자 수는 "+memberInfo.getFriNum()+" 명");
+//		}
+
+System.out.println("언제 운동예약을 할 것인가요?");
+		System.out.println(">>");
+		String reservation=sc.nextLine();
+		String numname="";
+		int num=0;
+		
+		if(reservation.contains("월")||reservation.contains("화")||reservation.contains("수")||
+				reservation.contains("목")||reservation.contains("금")) {
+			
+			if(reservation.contains("월")) {
+				numname="mon_num";
+				num=memberInfo.getMonNum();
+				if(num==8) {
+					System.out.println("정원초과입니다.");
+					chknum();
+				}
+			}
+			else if(reservation.contains("화")) {
+				numname="tue_num";
+				if(num==8) {
+					System.out.println("정원초과입니다.");
+					chknum();
+				}
+			}
+			else if(reservation.contains("수")) {
+				numname="wed_num";
+				if(num==8) {
+					System.out.println("정원초과입니다.");
+					chknum();
+				}
+			}
+			else if(reservation.contains("목")) {
+				numname="thu_num";
+				if(num==8) {
+					System.out.println("정원초과입니다.");
+					chknum();
+				}
+			}
+			else if(reservation.contains("금")) {
+				numname="fri_num";
+				if(num==8) {
+					System.out.println("정원초과입니다.");
+					chknum();
+				}
+			}
+		}else {
+			System.out.println("요일을 잘못 입력하였습니다.");
+		}
+		reservation(numname);
+	}
+	
+	private void reservation(String numname) {
+		//db에 추가하기
+		int result=memberDAO.getInstance().addNum(numname);
+		if(result>0) {
+			System.out.println("예약완료");
+		}else {
+			System.out.println("예약실패");
+		}
+	

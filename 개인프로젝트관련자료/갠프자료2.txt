@@ -1,0 +1,145 @@
+public void reservation() {
+		//List<String> info=new ArrayList<>();
+		//info=memberDAO.getInstance().search();
+		
+		System.out.println();
+		System.out.println("--예약하기 탭입니다--");
+		System.out.println("각 수업의 정원은 8명입니다");
+		System.out.println("<<<각 수업의 예약자 수를 알려드리겠습니다>>>");
+		memberInfo=new member();
+		String[]name= {"월요일 오전 9시수업","화요일 오전 9시수업","수요일 오전 9시수업","목요일 오전 9시수업","금요일 오전 9시수업","월요일 6시수업","화요일 6시수업","수요일 6시수업","목요일 6시수업","금요일 6시수업","월요일 9시수업","화요일 9시수업","수요일 9시수업","목요일 9시수업","금요일 9시수업"};
+		int reser[]=memberInfo.reservation();
+		
+		for(int i=0;i<name.length;i++) {
+				System.out.println(//"/"+info.get(i)+" 수업"+
+						"<"+name[i]+">"+"  예약자수는 "+reser[i]+" 명 입니다");
+				if(i%5==4) {
+					if(i==4) {
+						System.out.println("- - - - - - - - - - - - - - - - - - - - - - - - - - - - - --오전수업");
+					}else {
+						System.out.println(" - -  - -  - - - - - - - - - - - - - - - - - - - - - - - - -오후수업");
+					}
+			}
+		}
+		int result=memberDAO.getInstance().fullOrnot(reser);//랜덤값을 DB에 대입
+		if(result>0) {
+		}else {
+			System.out.println("죄송합니다. 오류가 발생했습니다. 다시 진행해 주세요");
+			menu();
+		}
+		String dayOfWeek="";
+		int time=0;
+		int times=0;
+		pick(dayOfWeek,time,times);
+	}
+	
+	
+	private void pick(String dayOfWeek,int time, int times){
+		boolean run=true;
+		while(true) {
+			System.out.println("이번 주에는 몇 번 운동을 할 것인가요?(숫자만)");
+			System.out.println(">>");
+			times=Integer.parseInt(sc.nextLine());
+			if(times==1|times==2||times==3) {
+				break;
+			}else {
+				System.out.println("최대 3회까지 예약할 수 있습니다");
+				System.out.println();
+			}
+		}
+		
+		while(run) {
+			System.out.println("무슨 요일에 운동을 하실건가요?");
+			System.out.println(">>");
+			dayOfWeek=sc.nextLine();
+			if(dayOfWeek.contains("월")||
+			   dayOfWeek.contains("금")||
+			   dayOfWeek.contains("화")||
+			   dayOfWeek.contains("수")||
+			   dayOfWeek.contains("목")
+			   ) {
+				run=false;
+			}else {
+				System.out.println("요일을 잘못 입력하였습니다.다시 입력해 주세요");
+				System.out.println();
+			}
+		}run=true;
+		
+		while(run) {
+			System.out.println("시간은 어떻게 되나요?(24시간 단위로 숫자만 기입)");
+			System.out.println(">>");
+			time=Integer.parseInt(sc.nextLine());
+			if(time==9||time==18||time==21) {
+				run=false;
+			}else {
+				System.out.println("시간을 잘못 입력하였습니다.");
+				System.out.println("오전9시:9 \n오후6시:18 \n오후9시:21");
+				System.out.println("으로 기입\n");
+			}
+		}
+		String reserlist[]=new String[times];//예약횟수에 따른 배열
+		String chked="";
+		if(time==9) {
+			if(dayOfWeek.contains("월")) {
+				chked="mon_9am";
+			}else if(dayOfWeek.contains("화")) {
+				chked="tue_9am";
+			}else if(dayOfWeek.contains("수")) {
+				chked="wed_9am";
+			}else if(dayOfWeek.contains("목")) {
+				chked="thu_9am";
+			}else if(dayOfWeek.contains("금")) {
+				chked="fri_9am";
+			}
+		}else if(time==18){
+			if(dayOfWeek.contains("월")) {
+				chked="mon_6pm";
+			}else if(dayOfWeek.contains("화")) {
+				chked="tue_6pm";
+			}else if(dayOfWeek.contains("수")) {
+				chked="wed_6pm";
+			}else if(dayOfWeek.contains("목")) {
+				chked="thu_6pm";
+			}else if(dayOfWeek.contains("금")) {
+				chked="fri_6pm";
+			}
+		}else if(time==21){
+			if(dayOfWeek.contains("월")) {
+				chked="mon_9pm";
+			}else if(dayOfWeek.contains("화")) {
+				chked="tue_9pm";
+			}else if(dayOfWeek.contains("수")) {
+				chked="wed_9pm";
+			}else if(dayOfWeek.contains("목")) {
+				chked="thu_9pm";
+			}else if(dayOfWeek.contains("금")) {
+				chked="fri_9pm";
+			}
+		}
+	
+		member mem=memberDAO.getInstance().chkreservation(chked);
+		if(mem==null) {
+			System.out.println("연결에 실패하였습니다.");
+			System.out.println();
+			pick(dayOfWeek,time,times);
+			
+		}
+//		else if(mem.getReserpermit().equals(null)) {
+//			System.out.println("죄송합니다.해당 시간의 정원이 다 찼습니다.");
+//			System.out.println();
+//			pick(dayOfWeek,time,times);
+//			}
+		else {
+			mem=memberDAO.getInstance().reservation1(chked);
+			if(mem.getReservation1().equals("예약성공")) {
+				mem=memberDAO.getInstance().reservation1(chked);
+				if(mem.getReservation1()!="예약성공"&&mem.getReservation1()!=null) {
+					System.out.println(mem.getReservation1()+" 이 예약되었습니다.");
+				}
+			}else {
+				System.out.println("죄송합니다.예약에 실패했습니다");
+				pick(dayOfWeek,time,times);
+			}
+		}
+		
+	}

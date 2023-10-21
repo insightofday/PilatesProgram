@@ -1,0 +1,59 @@
+public int reservation() {
+		//member mem=null;
+		//int[]a= new int[5];
+		int result=0;
+		try {
+			conn();
+			String sql="update reservation set mon_num =trunc(dbms_random.value(0,8)), tue_num=trunc(dbms_random.value(0,8)),wed_num=trunc(dbms_random.value(0,8)),"
+					+ "thu_num=trunc(dbms_random.value(0,8)),fri_num=trunc(dbms_random.value(0,8))\r\n"
+					+ "where date_info=20230527";
+			pstmt=conn.prepareStatement(sql);
+			result=pstmt.executeUpdate();
+		}catch(Exception e) {
+			e.printStackTrace();
+		}finally {
+			disConn();
+		}
+		return result;
+	}
+
+
+	public int addNum(String numname) {
+		int result=0;
+		try {
+			conn();
+			String sql="update reservation set ? = (select ? from reservation)+1 where date_info='20230527'";
+			pstmt=conn.prepareStatement(sql);
+			pstmt.setString(1, numname);
+			pstmt.setString(2, numname);
+			result=pstmt.executeUpdate();
+		}catch(Exception e) {
+			e.printStackTrace();
+		}finally {
+			disConn();
+		}
+		return result;
+	}
+	public member chknum() {
+		member mem=null;
+		try {
+			conn();
+			String sql="select mon_num, tue_num, wed_num, thu_num, fri_num from reservation";
+			pstmt=conn.prepareStatement(sql);
+			rs=pstmt.executeQuery();
+			if(rs.next()) {
+				mem=new member();
+				mem.setMonNum(rs.getInt("mon_num"));
+				mem.setTueNum(rs.getInt("tue_num"));
+				mem.setWedNum(rs.getInt("wed_num"));
+				mem.setThuNum(rs.getInt("thu_num"));
+				mem.setFriNum(rs.getInt("fri_num"));
+				mem.setReserpermit("success");
+			}
+		}catch(Exception e) {
+			e.printStackTrace();
+		}finally {
+			disConn();
+		}
+		return mem;
+	}

@@ -1,0 +1,164 @@
+private void reservation() {
+		List<String> info=new ArrayList<>();
+		info=memberDAO.getInstance().search();
+//		List<int>reser=new ArrayList<>
+//		String[] teacher=new String[15];
+//		String[] cname= new String[15];
+//		for(int i=0;i<info.size();i++) {
+//			info.get(i).toString().split("/");
+//			if(i==0) {
+//				teacher[0]=
+//			}
+//		}
+
+		System.out.println();
+		System.out.println("--예약하기 탭입니다--");
+		System.out.println("각 수업의 정원은 8명입니다");
+		System.out.println("<<<각 수업의 예약자 수를 알려드리겠습니다>>>");
+		memberInfo=new member();
+		String[]name= {"월요일 오전 9시수업","화요일 오전 9시수업","수요일 오전 9시수업","목요일 오전 9시수업","금요일 오전 9시수업","월요일 6시수업","화요일 6시수업","수요일 6시수업","목요일 6시수업","금요일 6시수업","월요일 9시수업","화요일 9시수업","수요일 9시수업","목요일 9시수업","금요일 9시수업"};
+		int reser[]=memberInfo.reservation();
+		
+		for(int i=0;i<info.size();i++) {
+				System.out.println("/"+info.get(i)+" 수업"+
+						"<"+name[i]+">"+"  예약자수는 "+reser[i]+" 명 입니다");
+				if(i%5==4) {
+					if(i==4) {
+						System.out.println("- - - - - - - - - - - - - - - - - - - - - - - - - - - - - --오전수업");
+					}else {
+						System.out.println(" - -  - -  - - - - - - - - - - - - - - - - - - - - - - - - -오후수업");
+					}
+			}
+		}
+		
+		System.out.println("이번 주에는 몇 번 운동을 할 예정입니까?");
+		System.out.println("1.1번  2.2번  3.3번");
+		System.out.println(">>");
+		int menu=Integer.parseInt(sc.nextLine());
+		plan(menu, reser);
+		
+		
+		
+		
+	}
+	
+	private void plan(int menu ,int reser[]) {
+		boolean run=true;
+		//int reser[]=memberInfo.reservation();
+		while(run) {
+		switch(menu) {
+			case 1: 
+				goReserve(menu ,reser);
+				break;
+			case 2:
+				
+				break;
+			case 3:
+				
+				break;
+			default:
+				System.out.println("번호를 잘못 누르셨어요. 다시 골라주세요");
+				run=false;
+				break;
+			}
+		}
+	}
+
+	private void goReserve(int menu ,int reser[]) {
+		int dow=0;
+		boolean run=true;
+		int time=0;
+		String dayOfWeek;
+		while(run) {
+			System.out.println("무슨 요일에 운동을 할 예정인가요?");
+			System.out.println(">>");
+			dayOfWeek=sc.nextLine();
+			System.out.println("몇 시 수업을 듣고 싶은가요?");
+			System.out.println(" 오전 9시를 원하신다면 9, \n 오후 6시를 원하신다면 18, \n 오후 9시를 원하신다면 21 \n(숫자로 기입)");
+			System.out.println(">>");
+			time=Integer.parseInt(sc.nextLine());
+
+			switch(dayOfWeek) {
+			case "월":
+				dow=1;
+				run=false;
+				break;
+			case "화":
+				dow=2;
+				run=false;
+				break;
+			case "수":
+				dow=3;
+				run=false;
+				break;
+			case "목":
+				dow=4;
+				run=false;
+				break;
+			case "금":
+				dow=5;
+				run=false;
+				break;
+			default:
+				System.out.println("요일을 잘못 입력하였습니다.");
+				break;
+			}
+
+				switch(time) {
+				case 9:
+					for(int j=0;j<5;j++) {
+						if(reser[j]==8) {
+							System.out.println("선택하신 요일의 오전 9시 수업은 정원이 다 찼습니다");
+					}
+				}	
+				break;
+				case 18:
+					for(int j=0;j<5;j++) {
+					if(reser[j+5]==8) {
+						System.out.println("선택하신 요일의 오후 6시 수업은 정원이 다 찼습니다");
+					}
+					}
+					break;
+				case 21:
+					for(int j=0;j<5;j++) {
+						if(reser[j+10]==8) {
+							System.out.println("선택하신 요일의 오후 6시 수업은 정원이 다 찼습니다");
+						}
+					}	
+				default:
+					System.out.println("<"+dayOfWeek+">"+"수업을 예약하겠습니다.");
+					run=false;
+					break;
+				}
+			}
+				
+			
+//					if(time==9) {
+//					for(int j=0;j<5;j++) {
+//						if(reser[j]==8) {
+//							System.out.println("선택하신 요일의 오전 9시 수업은 정원이 다 찼습니다");
+//							run=false;
+//						}
+//					}
+//				}else if(time==18) {
+//					for(int j=0;j<5;j++) {
+//						if(reser[j+5]==8) {
+//							System.out.println("선택하신 요일의 오후 6시 수업은 정원이 다 찼습니다");
+//							run=false;
+//						}
+//					}
+//				}else if(time==21) {
+//					for(int j=0;j<5;j++) {
+//						if(reser[j+10]==8) {
+//							System.out.println("선택하신 요일의 오후 6시 수업은 정원이 다 찼습니다");
+//							run=false;
+//						}
+//					}
+//				}else {
+//					System.out.println("시간을 잘못 입력하셨습니다");
+//					break;
+//				}
+//			}
+//			System.out.println("<"+dayOfWeek+">"+"수업을 예약하겠습니다.");
+				
+		}
