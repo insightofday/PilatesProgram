@@ -1,4 +1,4 @@
 
 # personalPrj
-콘솔단의 프로젝트
+JAVA 콘솔단의 프로젝트
 
